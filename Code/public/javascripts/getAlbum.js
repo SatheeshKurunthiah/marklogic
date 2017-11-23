@@ -59,16 +59,13 @@ function searchByQueryBuilder(req, res, album, render) {
             return null;
         }
     }).then(function (result) {
-        if (!result){
-            console.log('1st if');
+        if (!result) {
             return res.status(500).json({ message: 'Collection not found' });
         }
-            
+
         if (result.render != undefined && result.render.indexOf('true') > -1) {
-            console.log('2nd if');
             return res.status(200).render('table', { songs: result.songs });
         } else {
-            console.log('else');
             return res.status(200).json(result.songs);
         }
     });
