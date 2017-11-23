@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1= title
+  div
+    form(action='/v1/search/song',method='post')
+      input(id='songname',type='text',value='',placeholder='Enter Song Name',name='songname')
+      input(type='submit',value='Search',data-transition='fade', data-theme='c')
+  br
+  div
+    form(action='/v1/search/album',method='post')
+      input(id='albumname',type='text',value='',placeholder='Enter Album Name',name='albumname')
+      input(type='submit',value='Search',data-transition='fade', data-theme='c')
+  br
+  div
+    form(action='/v1/load',method='post')
+      input(type='submit',value='Load Files',data-transition='fade', data-theme='c')
+  br

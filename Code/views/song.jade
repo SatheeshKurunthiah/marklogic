@@ -1,0 +1,14 @@
+table(border='1')
+  thead
+    tr
+      th Title
+      th Album
+      th Year
+      th Line
+  tbody
+    each song in songs
+      tr
+        td=song.title
+        td=song.album
+        td=song.year
+        td=song.lines
