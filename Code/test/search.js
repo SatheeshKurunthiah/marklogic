@@ -12,8 +12,9 @@ chai.use(chaiHttp);
 describe('/GET album', () => {
     it('it should return all songs under given album', (done) => {
         chai.request(server)
-            .get('/v1/album?name=War')
+            .get('/v1/album?name=Boy')
             .end((err, res) => {
+                console.log(res.body);
                 res.should.have.status(200);
                 res.should.be.json;
                 res.body.should.be.a('array');

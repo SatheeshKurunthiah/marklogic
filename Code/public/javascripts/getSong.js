@@ -1,20 +1,13 @@
 var connection = require('./connection.js');
 var exec = require('child_process').exec;
-var unirest = require("unirest");
-var http = require('http');
-var request = require('request');
-const { URL } = require('url');
 
 function searchByQueryBuilder(req, res, song, render) {
     connection.db.documents.query(
         connection.qb.where(connection.qb.value('file', song))
     ).result().then(function (documents) {
         var songs = [];
-        var len = documents.length;
-        if (len > 0) {
-            var count = 0;
+        if (documents.length > 0) {
             documents.forEach(function (document) {
-                count++;
                 var lines = [];
                 document.content.content.SONG.LINE.forEach(function (line) {
                     lines.push(line);
@@ -25,16 +18,18 @@ function searchByQueryBuilder(req, res, song, render) {
                     year: document.content.content.SONG.YEAR,
                     lines: lines
                 });
-                if (count == len) {
-                    if (render != undefined && render.indexOf('true') > -1) {
-                        res.status(200).render('song', { songs: songs });
-                    } else {
-                        res.status(200).json(songs);
-                    }
-                }
             });
+            return { render: render, songs: songs };
         } else {
-            res.status(500).json({ message: 'Collection not found' });
+            return null;
+        }
+    }).then(function (result) {
+        if (!result)
+            return res.status(500).json({ message: 'Collection not found' });
+        if (result.render != undefined && result.render.indexOf('true') > -1) {
+            return res.status(200).render('song', { songs: result.songs });
+        } else {
+            return res.status(200).json(result.songs);
         }
     });
 };

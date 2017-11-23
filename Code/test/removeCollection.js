@@ -83,3 +83,15 @@ describe('/POST delete', () => {
             });
     });
 });
+
+// Load all files to DB
+describe('/GET load', () => {
+    it('it should load all files in Data folder', (done) => {
+        chai.request(server)
+            .get('/v1/load')
+            .end((err, res) => {
+                res.should.have.status(200);
+                done();
+            });
+    });
+});

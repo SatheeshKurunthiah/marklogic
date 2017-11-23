@@ -24,7 +24,7 @@ function searchByApi(req, res, album, render) {
                             });
                         }
                         uniqueSongs.push(fileJson.content.SONG.TITLE);
-                    }                    
+                    }
                     if (count == len) {
                         if (render != undefined && render.indexOf('true') > -1) {
                             res.status(200).render('table', { songs: songs })
@@ -54,14 +54,22 @@ function searchByQueryBuilder(req, res, album, render) {
             documents.forEach(function (document) {
                 songs.push({ songName: document.content.file });
             });
-            if (render != undefined && render.indexOf('true') > -1) {
-                res.status(200).render('table', { songs: songs });
-            } else {
-                res.status(200).json(songs);
-            }
-
+            return { render: render, songs: songs };
         } else {
-            res.status(500).json({ message: 'Collection not found' });
+            return null;
+        }
+    }).then(function (result) {
+        if (!result){
+            console.log('1st if');
+            return res.status(500).json({ message: 'Collection not found' });
+        }
+            
+        if (result.render != undefined && result.render.indexOf('true') > -1) {
+            console.log('2nd if');
+            return res.status(200).render('table', { songs: result.songs });
+        } else {
+            console.log('else');
+            return res.status(200).json(result.songs);
         }
     });
 };
